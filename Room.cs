@@ -8,7 +8,7 @@ namespace DungeonExplorer
     public class Room
     {
         private string description; // Declaring the description variable
-        public List<string> randomRoom = new List<string>{"The floor is flooded", "The Room is decayed with broken glass on the floor", "The Room is sandy and dry"}; // Declaring the randomRoom list filled with 3 descriptions
+        public List<string> randomRoom = new List<string>{" is flooded", " is decayed with broken glass on the floor", " is sandy and dry"}; // Declaring the randomRoom list filled with 3 descriptions
 
         bool condition = false; // Declaring a terminating condtion so the process will loop until a value is returned
 
