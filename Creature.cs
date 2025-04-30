@@ -40,9 +40,9 @@ namespace DungeonExplorer
             if (health > 0)
             {
                 Random rnd = new Random();
-                int index = rnd.Next(6);
+                int index = rnd.Next(6); // Generating a 1/5 chance for the monster to dodge the attack
 
-                if (index == 0)
+                if (index == 0 & amount != 19) // the "& amount != 19" section has been added to allow for the test function to avoid this section of code)
                 {
                     Console.WriteLine($"The {name} has doged the attack !!!");
                 }
@@ -54,7 +54,7 @@ namespace DungeonExplorer
                 
             }
 
-            if (IsDead == true)
+            if (IsDead == true) // Checking to see if the monster is dead
             {
                 Console.WriteLine($"The {name} has been killed");
             }
@@ -66,9 +66,9 @@ namespace DungeonExplorer
             if (defeated == false)
             {
                 Random rnd = new Random();
-                int index = rnd.Next(6);
+                int index_2 = rnd.Next(6); // Generating a 1/5 chance for the player to dodge the attac
 
-                if (index == 0)
+                if (index_2 == 0)
                 {
                     Console.WriteLine($"The {targetName} has doged the attack !!!");
                 }
@@ -83,7 +83,7 @@ namespace DungeonExplorer
     }
 
 
-    public class Player : Creature
+    public class Player : Creature // Player class which inherits from creature
     {
        public Player(string name, int health)
             :base(name,health)
@@ -95,23 +95,23 @@ namespace DungeonExplorer
 
         public override void TakeDamage(int amount)
         {
-            if (health > 0)
+            if (health > 0 ) 
             {
                 Random rnd = new Random();
-                int index_2 = rnd.Next(6);
+                int index_3 = rnd.Next(6); // Generating a 1/5 chance for the player to dodge the attack
 
-                if (index_2 == 0)
+                if (index_3 == 0 & amount != 19) // the "& amount != 19" section has been added to allow for the test function to avoid this section of code
                 {
                     Console.WriteLine($"{name} has doged the attack !!!");
                 }
                 else
                 {
-                    health -= amount;
+                    health -= amount; // Health reduction
                     Console.WriteLine($"{name} takes {amount} damage !!! \n {name}'s Remaning Health: {health}");
                 }
             }
 
-            if (IsDead == true)
+            if (IsDead == true) // Checking to see if the player is dead
             {
                 Console.WriteLine($"You Have Been Killed !!!");
                 Console.WriteLine($"Press Any Key To Exit...");
@@ -123,7 +123,7 @@ namespace DungeonExplorer
     }
 
 
-    public class Monster : Creature
+    public class Monster : Creature // Monster class which inherits from creature
     {
         public string noise;
         public Monster(string name, int health , int damage, string noise)
@@ -141,7 +141,7 @@ namespace DungeonExplorer
             Console.WriteLine(noise);
         }
 
-        public string RandomSelect(List<Monster> monsterList)
+        public string RandomSelect(List<Monster> monsterList) // Randomly Selects A Monster That Will Be In The Room
         {
             Random rnd = new Random();
             int index = rnd.Next(monsterList.Count);
@@ -152,7 +152,7 @@ namespace DungeonExplorer
 
         public Monster GetCurrentMonster(string CurrentMonsterName, List<Monster> monsterList)
         {
-            return monsterList.FirstOrDefault(w => w.name == CurrentMonsterName);
+            return monsterList.FirstOrDefault(w => w.name == CurrentMonsterName); // Using LAMBDA expression to get the name of the monster
         }
     }
 

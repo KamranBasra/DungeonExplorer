@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xunit;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Media;
@@ -24,29 +25,45 @@ namespace DungeonExplorer
         private Weapon sword;
         private Weapon knife;
         private Weapon starterKnife;
+        private Weapon longsword;
         private Potion fullPotion;
         private Potion halfPotion;
+        private GameMap map;
+        private Room room1;
+        private Room room2;
+        private Room room3;
+        private Room room4;
+        private Room room5;
+
 
 
         public Game()
         {
-            // Initialize the game with one room and one player
+            // Initialize the objects
 
             Console.WriteLine("What is your name? ");
             string name = Console.ReadLine();
 
             player = new Player(name, 20);
             currentRoom = new Room("The Room is dark and misty");
+            map = new GameMap();
          
             dragon = new Monster("Dragon", 15, 7, "GGRRRAAAUUUGHHH!");
             zombie = new Monster("Zombie", 12, 5, "Uuurrgghhh");
             skeleton = new Monster("Skeleton", 10, 4, "clack clack clack");
             spider = new Monster("Spider", 7, 3, "skkssksskssk");
 
+            room1 = new Room("The Room is dark and misty");
+            room2 = new Room("The Room is flooded");
+            room3 = new Room("The Room is decayed with broken glass on the floor");
+            room4 = new Room("The Room is sandy and dry");
+            room5 = new Room(" The Room is an abandoned blacksmiths quater");
+
             axe = new Weapon("axe", 5);
             bow = new Weapon("bow", 3);
-            sword = new Weapon("sword", 7);
+            sword = new Weapon("sword", 6);
             knife = new Weapon("knife", 4);
+            longsword = new Weapon("longsword", 7);
             starterKnife = new Weapon("rusty knife", 2);
 
             fullPotion = new Potion("Big Potion", 10);
@@ -57,7 +74,7 @@ namespace DungeonExplorer
         }
         public void Start()
         {
-            // Change the playing logic into true and populate the while loop
+            // Defining game variables
             bool playing = true;
             bool opened = false;
             bool defeated = false;
@@ -67,8 +84,8 @@ namespace DungeonExplorer
 
 
             List<string> visitedRoom = new List<string>(); // Initializing a list of visited rooms
-            List<string> foundWeapons = new List<string> (); // Initializing a list of items
-            List<string> foundPotions = new List<string> (); // Initializing a list of items
+            List<string> foundWeapons = new List<string> (); // Initializing a list of found weapons
+            List<string> foundPotions = new List<string> (); // Initializing a list of found potions
 
             List<Monster> monsterList = new List<Monster>();
             List<Weapon> weaponList = new List<Weapon>();
@@ -85,6 +102,7 @@ namespace DungeonExplorer
             weaponList.Add(knife);
             weaponList.Add(starterKnife);
             inventory.AddItem("rusty knife");
+            foundWeapons.Add("rusty knife");
 
             potionList.Add(fullPotion);
             potionList.Add(halfPotion);
@@ -118,15 +136,15 @@ namespace DungeonExplorer
                 previousMonsterName = currentMonsterName;
 
 
-                if (defeated == false)
+                if (defeated == false) // If the monster has not yet been defeated then it still appears in the title, and the option to move on is not present
                 {
-                    Console.WriteLine($"The room {currentRoom.GetDescription()}, ahead of you there is a {currentMonsterName}");
+                    Console.WriteLine($"{currentRoom.GetDescription()}, ahead of you there is a {currentMonsterName}");
                     Console.WriteLine("\nWould You Like to:\n 1) Look Around \n 2) Open the Chest \n 3) Check Your Current Status \n 4) Open Your Inventory \n 5) Fight The Monster Ahead Of You \n 6) Exit\n");
                 }
 
                 else if (defeated == true)
                 {
-                    Console.WriteLine($"The room {currentRoom.GetDescription()}");
+                    Console.WriteLine($"{currentRoom.GetDescription()}");
                     Console.WriteLine("\nWould You Like to:\n 1) Look Around \n 2) Open the Chest \n 3) Check Your Current Status \n 4) Open Your Inventory \n 5) Move Onto The Next Room \n 6) Exit\n"); // Options for the user to progress
                 }
 
@@ -154,7 +172,7 @@ namespace DungeonExplorer
                         {
                             while (moveOnCondition == false)
                             {
-                                int index = rnd.Next(weaponList.Count);
+                                int index = rnd.Next(weaponList.Count); // Randomly selected whether a potion or a weapon is added
                                 if (index > potionList.Count)
                                 {
                                     ChosenItem = weaponList[index].name;
@@ -171,7 +189,7 @@ namespace DungeonExplorer
 
                                 }
 
-                                else if (index < potionList.Count)
+                                else if (index < potionList.Count)  // Randomly selected whether a potion or a weapon is added
                                 {
                                     int index_2 = rnd.Next(2);
                                     if (index_2 == 0)
@@ -189,7 +207,7 @@ namespace DungeonExplorer
                                         }
                                     }
 
-                                    else if (index_2 == 1)
+                                    else if (index_2 == 1) // Then further randomizes whether a small or big potion is found
                                     {
                                         ChosenItem = potionList[index].name;
                                         if (foundPotions.Contains(ChosenItem))
@@ -249,7 +267,7 @@ namespace DungeonExplorer
                     {
 
                         Console.WriteLine("Your inventory Currently Contains of:");
-                        Console.Write(inventory.GetInventory());
+                        Console.Write(inventory.GetInventory()); // Displays inventory contents
                         Console.WriteLine("");
                         Console.WriteLine("Would you like to:\n 1) Configure Your Inventory \n 2) Select An Item \n 3) Continue");
                         string decision = Console.ReadLine();
@@ -270,7 +288,7 @@ namespace DungeonExplorer
 
                                     if (inventory.ContainsItem(deletedItem) == true)
                                     {
-                                        inventory.RemoveItem(deletedItem);
+                                        inventory.RemoveItem(deletedItem); // Removes an item from inventory
                                         condition = false;
                                     }
 
@@ -281,7 +299,7 @@ namespace DungeonExplorer
 
                                     else if (inventory.ContainsItem(deletedItem) == false)
                                     {
-                                        Console.WriteLine("Your Inventory Does Not Contain This Item");
+                                        Console.WriteLine("Your Inventory Does Not Contain This Item"); // Error handling if the item is not in the inventory
                                     }
                                 }
 
@@ -290,17 +308,17 @@ namespace DungeonExplorer
 
                             else if (decision_2 == "2")
                             {
-                                selectedItem = inventory.SelectItem();
+                                selectedItem = inventory.SelectItem(); // Selects an item
                             }
 
                             else if (decision_2 == "3")
                             {
-                                Console.Write(inventory.ShowWeapons(weaponList));
+                                Console.Write(inventory.ShowWeapons(weaponList)); // Filters to show only weapons in the inventory
                             }
 
                             else if (decision_2 == "4")
                             {
-                                Console.Write(inventory.ShowPotions(potionList));
+                                Console.Write(inventory.ShowPotions(potionList)); // Filters to show only weapons in the inventory
                             }
 
                             else if (decision_2 == "5")
@@ -310,7 +328,7 @@ namespace DungeonExplorer
 
                         }
 
-                        else if (decision == "2")
+                        else if (decision == "2") // Selects an item
                         {
                             selectedItem = inventory.SelectItem();
                         }
@@ -325,21 +343,34 @@ namespace DungeonExplorer
 
                 else if ((ans == "5" & defeated == true)) // If the input is "5" then the player will advance to another room
                 {
-                    string newDescription = currentRoom.RandRoom(visitedRoom);
+                    Console.WriteLine("Which Direction Would You Like To Move In? Up/Down/Left/Right");
+                    string direction = Console.ReadLine();
 
-                    if (newDescription == "") // If the returned value is blank, then every room has been visited already
+                    try
                     {
-                        Console.WriteLine("All rooms have been visited ");
+                        string previousDescription = currentRoom.GetDescription(); // Temporary hold for the old room description
+                        string newDescription = map.Move(direction, currentRoom, room1, room2, room3, room4, room5);
+                        if (newDescription == previousDescription)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            opened = false;
+                            roomStarted = false;
+                            defeated = false;
+                            currentRoom.description = newDescription;
+                        }
+
                     }
-                    else // Otherwise the new room is visited
+                    catch (FormatException ex) // Error handling  if there are any random exception
                     {
-                        currentRoom = new Room(newDescription);
-                        visitedRoom.Add(newDescription); // Adding the current description to the visitedRoom list to ensure the same room is not revisited
-                        opened = false;
-                        roomStarted = false;
-                        defeated = false;
-                    }
-                }
+                        Console.WriteLine(ex.Message);
+                    } 
+                    
+                    
+
+                }   
 
                 else if (ans == "5" & defeated == false)
                 {
@@ -352,36 +383,36 @@ namespace DungeonExplorer
 
                         if (decision == "1")
                         {
-                            Console.WriteLine($" Your Inventory Contains: {inventory.GetInventory()}");
+                            Console.WriteLine($" Your Inventory Contains: {inventory.GetInventory()}"); // Displays the Contents of the inventory
                             Console.WriteLine("Would you like to:\n 1) Select A New Item \n 2) Continue ");
                             string decision_2 = Console.ReadLine();
 
                             if (decision_2 == "1")
                             {
-                               selectedItem = inventory.SelectItem();
-                                                                  
+                                selectedItem = inventory.SelectItem(); // Selects a new item to be used
+
                             }
 
-                            if (decision_2 == "2")
+                            if (decision_2 == "2") // Returns Back To Menu
                             {
                                 continue;
                             }
                         }
 
-                        else if (decision == "2")
+                        else if (decision == "2") // Displays the currently selected item
                         {
                             Console.WriteLine($"The Item That Is Currently Selected is: {selectedItem}");
                         }
 
                         else if (decision == "3")
                         {
-                            if (selectedItem == null)
+                            if (selectedItem == null) // Error handling incase the user has not got an item selected
                             {
                                 Console.WriteLine("No Item Is Currently Selected, Please Select An Item !!!");
                             }
 
 
-                            else if ( (inventory.ShowPotions(potionList)).Contains(selectedItem ))
+                            else if ((inventory.ShowPotions(potionList)).Contains(selectedItem)) // If a potion is equpped then the potion is used withouth engaging with the monster
                             {
                                 if (selectedItem == "Big Potion")
                                 {
@@ -394,18 +425,18 @@ namespace DungeonExplorer
                                 }
                             }
 
-                            else if ((inventory.ShowWeapons(weaponList)).Contains(selectedItem))
+                            else if ((inventory.ShowWeapons(weaponList)).Contains(selectedItem)) // If a weapon is equipped then the weapon is used against the monster
                             {
                                 Monster currentMonsterObject = monsterList.FirstOrDefault(m => m.name == currentMonsterName);
                                 player.DealDamage(currentMonsterObject, inventory.SelectWeapon(selectedItem, weaponList), currentMonsterName, defeated);
-                                if (currentMonsterObject.health > 0 & defeated == false)
+                                if (currentMonsterObject.health > 0 & defeated == false) // Making sure the monster is alive and has not been previously defeated
                                 {
                                     player.TakeDamage(currentMonsterObject.damage);
                                 }
                                 if (currentMonsterObject.IsDead)
                                 {
                                     defeated = true;
-                                    currentMonsterObject.health = currentMonsterObject.maxHealth;
+                                   // currentMonsterObject.health = currentMonsterObject.maxHealth;
                                 }
                                 if (defeated == true)
                                 {
