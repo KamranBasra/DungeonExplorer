@@ -24,7 +24,7 @@ namespace DungeonExplorer
             var weapon = new Weapon("testWeapon", 10);
             var target = new Monster("testMonster", 20, 10, "ah");
 
-            player.DealDamage(target, weapon, "testWeapon", false);
+            player.DealDamage(target, weapon, "testMonster", false);
             Assert.Equal(10, target.health);
         }
     }

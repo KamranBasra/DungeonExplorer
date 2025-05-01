@@ -68,7 +68,7 @@ namespace DungeonExplorer
                 Random rnd = new Random();
                 int index_2 = rnd.Next(6); // Generating a 1/5 chance for the player to dodge the attac
 
-                if (index_2 == 0)
+                if (index_2 == 0 & targetName != "testMonster")
                 {
                     Console.WriteLine($"The {targetName} has doged the attack !!!");
                 }
